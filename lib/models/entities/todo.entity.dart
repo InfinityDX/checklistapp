@@ -7,7 +7,7 @@ class Todo {
   String title;
   bool isCompleted;
   bool isPrioritized;
-  @PropertyType(type: PropertyType.date)
+  // @PropertyType(type: PropertyType.date)
   DateTime? createdDate;
 
   Todo({
@@ -37,5 +37,21 @@ class Todo {
         isCompleted.hashCode ^
         isPrioritized.hashCode ^
         createdDate.hashCode;
+  }
+
+  Todo copyWith({
+    int? id,
+    String? title,
+    bool? isCompleted,
+    bool? isPrioritized,
+    DateTime? createdDate,
+  }) {
+    return Todo(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      isCompleted: isCompleted ?? this.isCompleted,
+      isPrioritized: isPrioritized ?? this.isPrioritized,
+      createdDate: createdDate ?? this.createdDate,
+    );
   }
 }

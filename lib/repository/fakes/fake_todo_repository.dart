@@ -1,6 +1,6 @@
+import 'package:checklistapp/helper/extensions/date_extensions.dart';
 import 'package:checklistapp/models/entities/todo.entity.dart';
 import 'package:checklistapp/models/filter.dart';
-import 'package:checklistapp/models/pagination.dart';
 import 'package:checklistapp/repository/fakes/fake_todo_data.dart';
 import 'package:checklistapp/repository/interfaces/i_todo_repository.dart';
 
@@ -8,24 +8,28 @@ class FakeTodoRepository implements ITodoRepository {
   final fakeData = FakeTodoData();
 
   @override
-  Future<List<Todo>> getTodos({
-    Filter filter = const Filter(),
-    Pagination pagination = const Pagination(),
-  }) async {
-    return fakeData.todos;
+  Future<List<Todo>> getTodos({Filter filter = const Filter()}) async {
+    return fakeData.todos.where((todo) {
+      if (todo.createdDate == null) return false;
+      return todo.createdDate!.isBetween(filter.startDate, filter.endDate);
+    }).toList();
   }
 
   @override
-  Future<void> addTodo(Todo todo) async {
-    return fakeData.todos.add(todo);
+  Future<Todo?> addTodo(Todo todo) async {
+    final lastId = fakeData.todos.lastOrNull?.id ?? -1;
+    todo.id = lastId + 1;
+    fakeData.todos.add(todo);
+    return todo;
   }
 
   @override
-  Future<bool> updateTodo(Todo todo) async {
-    final fakeTodoIndex = fakeData.todos.indexOf(todo);
-    if (fakeTodoIndex < 0) return false;
+  Future<Todo?> updateTodo(Todo todo) async {
+    final fakeTodo = fakeData.todos.firstWhere((todo) => todo.id == todo.id);
+    final fakeTodoIndex = fakeData.todos.indexOf(fakeTodo);
+    if (fakeTodoIndex < 0) return null;
     fakeData.todos[fakeTodoIndex] = todo;
-    return true;
+    return todo;
   }
 
   @override

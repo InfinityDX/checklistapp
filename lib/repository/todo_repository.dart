@@ -24,22 +24,20 @@ class TodoRepository implements ITodoRepository {
         .build();
 
     query
-      ..offset = pagination.offset
+      ..offset = (pagination.page - 1) * pagination.limit
       ..limit = pagination.limit;
 
     return query.findAsync();
   }
 
   @override
-  Future<void> addTodo(Todo todo) {
-    return DB.todoBox.putAsync(todo, mode: PutMode.insert);
+  Future<Todo> addTodo(Todo todo) {
+    return DB.todoBox.putAndGetAsync(todo, mode: PutMode.insert);
   }
 
   @override
-  Future<bool> updateTodo(Todo todo) async {
-    final newId = await DB.todoBox.putAsync(todo, mode: PutMode.update);
-    if (newId < 0) return false;
-    return true;
+  Future<Todo> updateTodo(Todo todo) async {
+    return DB.todoBox.putAndGetAsync(todo, mode: PutMode.update);
   }
 
   @override

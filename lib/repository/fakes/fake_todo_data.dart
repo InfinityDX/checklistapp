@@ -15,12 +15,35 @@ class FakeTodoData {
     }));
 
     todos.addAll(List.generate(5, (index) {
+      final i = index + todos.last.id + 1;
       return Todo(
-        id: index,
+        id: i,
         title: 'Todo $index',
         isCompleted: false,
         isPrioritized: false,
         createdDate: DateTime(2024, 1, 2),
+      );
+    }));
+
+    todos.addAll(List.generate(15, (index) {
+      final i = index + todos.last.id + 1;
+      return Todo(
+        id: i,
+        title: 'Todo $index',
+        isCompleted: false,
+        isPrioritized: false,
+        createdDate: DateTime(2024, 1, 3),
+      );
+    }));
+
+    todos.addAll(List.generate(3, (index) {
+      final i = index + todos.last.id + 1;
+      return Todo(
+        id: i,
+        title: 'Todo $index',
+        isCompleted: false,
+        isPrioritized: false,
+        createdDate: DateTime(2024, 1, 4),
       );
     }));
   }
