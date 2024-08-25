@@ -6,14 +6,15 @@ class GColor {
   static ColorScheme get scheme =>
       Theme.of(materialAppKey.currentContext!).colorScheme;
 
-  static final Color seedColor = Colors.deepPurple;
+  static Color _seedColor = Colors.deepPurple;
+  static void setSeedColor(Color color) => _seedColor = color;
 
   // Theme Data to put into Material App
   static ThemeData get light => ThemeData(
         highlightColor: Colors.transparent,
         splashColor: Colors.transparent,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: seedColor,
+          seedColor: _seedColor,
           brightness: Brightness.light,
         ),
         bottomNavigationBarTheme: navTheme,
@@ -23,7 +24,7 @@ class GColor {
         highlightColor: Colors.transparent,
         splashColor: Colors.transparent,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: seedColor,
+          seedColor: _seedColor,
           brightness: Brightness.dark,
         ),
         bottomNavigationBarTheme: navTheme,
