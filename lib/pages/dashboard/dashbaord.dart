@@ -76,7 +76,7 @@ class _DashbaordState extends State<Dashbaord> {
                 return SliverToBoxAdapter(
                   child: Center(
                     child: Text(
-                      "No todo tasks today!",
+                      "No tasks today!",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,

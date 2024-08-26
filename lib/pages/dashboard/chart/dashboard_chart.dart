@@ -40,13 +40,13 @@ class _DashboardChartState extends State<DashboardChart> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: 32),
       child: AspectRatio(
         aspectRatio: 16 / 9,
         child: BlocBuilder<TodoCubit, TodoState>(
           bloc: todoCubit,
           builder: (context, state) {
-            var yInterval = 2.0;
+            var yInterval = 1.0;
             final maxTodo = state.todos.length;
             if (maxTodo > 100) {
               yInterval = (maxTodo / 10).floorToDouble();
@@ -54,8 +54,9 @@ class _DashboardChartState extends State<DashboardChart> {
               yInterval = 20;
             } else if (maxTodo > 25) {
               yInterval = 10;
+            } else if (maxTodo > 10) {
+              yInterval = 2;
             }
-
             final todoListByDate = TodoHelper.groupByDate(state.todos);
 
             return LineChart(
@@ -68,6 +69,7 @@ class _DashboardChartState extends State<DashboardChart> {
                     axisNameSize: 16,
                     sideTitles: SideTitles(
                       getTitlesWidget: (value, meta) {
+                        value++;
                         final now = DateTime.now();
                         final day = 7 - value.toInt();
                         return Padding(
@@ -131,7 +133,8 @@ class _DashboardChartState extends State<DashboardChart> {
                 ),
                 lineBarsData: [
                   LineChartBarData(
-                    isCurved: true,
+                    // isCurved: true,
+                    // curveSmoothness: 0.1,
                     dotData: FlDotData(show: false),
                     dashArray: [8, 8],
                     barWidth: 4,
@@ -140,7 +143,8 @@ class _DashboardChartState extends State<DashboardChart> {
                     spots: getAllTodo(todoListByDate, isCompletedOnly: true),
                   ),
                   LineChartBarData(
-                    isCurved: true,
+                    // isCurved: true,
+                    // curveSmoothness: 0.5,
                     dotData: FlDotData(show: false),
                     color: GColor.scheme.primary,
                     isStrokeCapRound: true,
@@ -161,18 +165,19 @@ class _DashboardChartState extends State<DashboardChart> {
     List<List<Todo>> todos, {
     bool isCompletedOnly = false,
   }) {
-    var all7DaysTodo = List.of(todos);
+    var copiedTodo = List.of(todos);
     if (isCompletedOnly) {
-      all7DaysTodo = all7DaysTodo
+      copiedTodo = copiedTodo
           .map((e) => e.where((todo) => todo.isCompleted).toList())
           .toList();
-    }
+    } else {}
+    var all7DaysTodo = List.filled(
+      7 - copiedTodo.length,
+      <Todo>[],
+      growable: true,
+    );
 
-    while (all7DaysTodo.length < 7) {
-      all7DaysTodo.add([]);
-    }
-
-    all7DaysTodo = all7DaysTodo.reversed.toList();
+    all7DaysTodo.addAll(copiedTodo);
 
     final allSpot = <FlSpot>[];
 
