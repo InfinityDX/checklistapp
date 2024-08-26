@@ -16,10 +16,12 @@ class App extends StatelessWidget {
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {
           return MaterialApp(
+            key: materialAppKey,
             title: 'Flutter Demo',
             theme: GColor.light,
             darkTheme: GColor.dark,
             themeMode: state.mode,
+            // themeMode: ThemeMode.dark,
             home: const Wrapper(),
           );
         },

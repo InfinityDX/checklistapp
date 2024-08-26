@@ -6,11 +6,13 @@ class GColor {
   static ColorScheme get scheme =>
       Theme.of(materialAppKey.currentContext!).colorScheme;
 
+  static String _fontFamily = 'Nunito';
   static Color _seedColor = Colors.deepPurple;
   static void setSeedColor(Color color) => _seedColor = color;
 
   // Theme Data to put into Material App
   static ThemeData get light => ThemeData(
+        fontFamily: _fontFamily,
         highlightColor: Colors.transparent,
         splashColor: Colors.transparent,
         colorScheme: ColorScheme.fromSeed(
@@ -21,6 +23,7 @@ class GColor {
       );
 
   static ThemeData get dark => ThemeData(
+        fontFamily: _fontFamily,
         highlightColor: Colors.transparent,
         splashColor: Colors.transparent,
         colorScheme: ColorScheme.fromSeed(
