@@ -6,7 +6,6 @@ import 'package:checklistapp/models/filter.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
@@ -96,7 +95,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 if (state.todos.isEmpty) {
                   return Center(
                     child: Text(
-                      "No tasks today!",
+                      "No tasks on this date!",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
