@@ -39,8 +39,13 @@ class _DashboardChartState extends State<DashboardChart> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 32),
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.fromLTRB(16, 32, 32, 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: GColor.scheme.primaryContainer,
+      ),
       child: AspectRatio(
         aspectRatio: 16 / 9,
         child: BlocBuilder<TodoCubit, TodoState>(
@@ -64,11 +69,39 @@ class _DashboardChartState extends State<DashboardChart> {
                 gridData: FlGridData(show: false),
                 minY: 0,
                 minX: 0,
+                lineTouchData: LineTouchData(
+                  touchTooltipData: LineTouchTooltipData(
+                    tooltipRoundedRadius: 8,
+                    getTooltipItems: (touchedSpots) {
+                      if (touchedSpots.length < 2) return [];
+                      return [
+                        LineTooltipItem(
+                          'All: ${touchedSpots[0].y}',
+                          TextStyle(
+                            color: GColor.scheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        LineTooltipItem(
+                          'Done: ${touchedSpots[1].y}',
+                          TextStyle(
+                            color: GColor.scheme.inversePrimary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ];
+                    },
+                    getTooltipColor: (touchedSpot) {
+                      return GColor.scheme.surfaceBright;
+                    },
+                  ),
+                ),
                 titlesData: FlTitlesData(
                   bottomTitles: AxisTitles(
                     axisNameSize: 16,
                     sideTitles: SideTitles(
                       getTitlesWidget: (value, meta) {
+                        // Offset for the date in graph
                         value++;
                         final now = DateTime.now();
                         final day = 7 - value.toInt();

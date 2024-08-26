@@ -1,4 +1,5 @@
 import 'package:checklistapp/bloc/todo_cubit/todo_cubit.dart';
+import 'package:checklistapp/components/todo_component.dart';
 import 'package:checklistapp/constants/cubit_state_enum.dart';
 import 'package:checklistapp/helper/dependency_helper.dart';
 import 'package:checklistapp/models/filter.dart';
@@ -14,13 +15,19 @@ class Dashbaord extends StatefulWidget {
 }
 
 class _DashbaordState extends State<Dashbaord> {
-  final todayTodo = TodoCubit(
-    DependencyHelper.todoRepository,
-    filter: Filter(startDate: DateTime.now(), endDate: DateTime.now()),
-  );
+  late TodoCubit todayTodo;
 
   @override
   void initState() {
+    final now = DateTime.now();
+    final dateNow = DateTime(now.year, now.month, now.day);
+    todayTodo = TodoCubit(
+      DependencyHelper.todoRepository,
+      filter: Filter(
+        startDate: dateNow,
+        endDate: dateNow.add(const Duration(days: 1)),
+      ),
+    );
     todayTodo.getTodos();
     super.initState();
   }
@@ -50,12 +57,29 @@ class _DashbaordState extends State<Dashbaord> {
           ),
           // Charts
           SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                "This week's stats",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+
+          SliverToBoxAdapter(
+            child: const SizedBox(height: 8),
+          ),
+
+          SliverToBoxAdapter(
             child: DashboardChart(),
           ),
 
           SliverToBoxAdapter(
+            child: const SizedBox(height: 24),
+          ),
+          SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
                 "Today's Tasks",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -88,7 +112,8 @@ class _DashbaordState extends State<Dashbaord> {
               return SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    return Container();
+                    final todo = state.todos[index];
+                    return TodoComponent(todo: todo);
                   },
                   childCount: state.todos.length,
                 ),

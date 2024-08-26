@@ -12,6 +12,7 @@ class TodoRepository implements ITodoRepository {
     Pagination pagination = const Pagination(),
   }) {
     final dateNow = DateTime.now();
+
     var condition = Todo_.createdDate.betweenDate(
       filter.startDate ?? DateTime(dateNow.year, dateNow.month, dateNow.day),
       filter.endDate ?? DateTime(dateNow.year, dateNow.month, dateNow.day),
