@@ -16,7 +16,8 @@ class CalendarPage extends StatefulWidget {
   State<CalendarPage> createState() => _CalendarPageState();
 }
 
-class _CalendarPageState extends State<CalendarPage> {
+class _CalendarPageState extends State<CalendarPage>
+    with AutomaticKeepAliveClientMixin {
   var focusedDate = DateTime.now();
   late TodoCubit todoCubit;
 
@@ -43,6 +44,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,4 +193,7 @@ class _CalendarPageState extends State<CalendarPage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

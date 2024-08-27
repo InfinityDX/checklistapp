@@ -10,39 +10,44 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 final GlobalKey<NavigatorState> wrapperKey = GlobalKey<NavigatorState>();
 
-class Wrapper extends StatelessWidget {
+class Wrapper extends StatefulWidget {
   const Wrapper({super.key});
 
   @override
+  State<Wrapper> createState() => _WrapperState();
+}
+
+class _WrapperState extends State<Wrapper> {
+  final pageControlller = PageController();
+  final pages = [
+    Dashbaord(),
+    CalendarPage(),
+    SettingsPage(),
+  ];
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: wrapperKey,
-      body: Stack(children: [
-        BlocBuilder<PageCubit, PageState>(
-          builder: (context, state) {
-            switch (state.type) {
-              case PageType.dashboard:
-                return Dashbaord();
-              case PageType.calendar:
-                return CalendarPage();
-              case PageType.settings:
-                return SettingsPage();
-              default:
-                return Dashbaord();
-            }
+    return BlocListener<PageCubit, PageState>(
+      listener: (context, state) {
+        pageControlller.jumpToPage(PageType.values.indexOf(state.type));
+      },
+      child: Scaffold(
+        key: wrapperKey,
+        body: PageView(
+          physics: NeverScrollableScrollPhysics(),
+          controller: pageControlller,
+          children: pages,
+        ),
+        floatingActionButton: Builder(
+          builder: (context) {
+            return FloatingActionButton(
+              onPressed: () => showAddTodoSheet(context),
+              shape: CircleBorder(),
+              child: Icon(FluentIcons.add_24_regular),
+            );
           },
         ),
-      ]),
-      floatingActionButton: Builder(
-        builder: (context) {
-          return FloatingActionButton(
-            onPressed: () => showAddTodoSheet(context),
-            shape: CircleBorder(),
-            child: Icon(FluentIcons.add_24_regular),
-          );
-        },
+        bottomNavigationBar: BottomNav(),
       ),
-      bottomNavigationBar: BottomNav(),
     );
   }
 

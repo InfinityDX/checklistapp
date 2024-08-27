@@ -14,7 +14,8 @@ class Dashbaord extends StatefulWidget {
   State<Dashbaord> createState() => _DashbaordState();
 }
 
-class _DashbaordState extends State<Dashbaord> {
+class _DashbaordState extends State<Dashbaord>
+    with AutomaticKeepAliveClientMixin {
   late TodoCubit todayTodo;
 
   @override
@@ -40,6 +41,8 @@ class _DashbaordState extends State<Dashbaord> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return SafeArea(
       child: CustomScrollView(
         slivers: [
@@ -124,4 +127,7 @@ class _DashbaordState extends State<Dashbaord> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
