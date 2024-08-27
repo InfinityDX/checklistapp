@@ -1,6 +1,5 @@
 import 'package:checklistapp/models/entities/todo.entity.dart';
 import 'package:checklistapp/models/filter.dart';
-import 'package:checklistapp/models/pagination.dart';
 import 'package:checklistapp/objectbox.g.dart';
 import 'package:checklistapp/repository/interfaces/i_todo_repository.dart';
 import 'package:checklistapp/services/db.dart';
@@ -9,7 +8,6 @@ class TodoRepository implements ITodoRepository {
   @override
   Future<List<Todo>> getTodos({
     Filter filter = const Filter(),
-    Pagination pagination = const Pagination(),
   }) {
     final dateNow = DateTime.now();
 
@@ -28,11 +26,30 @@ class TodoRepository implements ITodoRepository {
         .order(Todo_.createdDate, flags: filter.order)
         .build();
 
-    query
-      ..offset = (pagination.page - 1) * pagination.limit
-      ..limit = pagination.limit;
-
     return query.findAsync();
+  }
+
+  Future<Stream<Query<Todo>>?> watchTodo({
+    Filter filter = const Filter(),
+  }) async {
+    final dateNow = DateTime.now();
+
+    var condition = Todo_.createdDate.betweenDate(
+      filter.startDate ?? DateTime(dateNow.year, dateNow.month, dateNow.day),
+      filter.endDate ?? DateTime(dateNow.year, dateNow.month, dateNow.day),
+    );
+
+    if (filter.isCompleted != null) {
+      condition = condition.and(Todo_.isCompleted.equals(filter.isCompleted!));
+    }
+
+    final sub = DB.todoBox
+        .query(condition)
+        .order(Todo_.isPrioritized)
+        .order(Todo_.createdDate, flags: filter.order)
+        .watch(triggerImmediately: true);
+
+    return sub;
   }
 
   @override

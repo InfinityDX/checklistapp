@@ -3,6 +3,7 @@ import 'package:checklistapp/models/entities/todo.entity.dart';
 import 'package:checklistapp/models/filter.dart';
 import 'package:checklistapp/repository/fakes/fake_todo_data.dart';
 import 'package:checklistapp/repository/interfaces/i_todo_repository.dart';
+import 'package:objectbox/src/native/query/query.dart';
 
 class FakeTodoRepository implements ITodoRepository {
   final fakeData = FakeTodoData();
@@ -41,5 +42,11 @@ class FakeTodoRepository implements ITodoRepository {
     if (foundTodo.id < 0) return false;
     fakeData.todos.remove(foundTodo);
     return true;
+  }
+
+  @override
+  Future<Stream<Query<Todo>>?> watchTodo(
+      {Filter filter = const Filter()}) async {
+    return null;
   }
 }
