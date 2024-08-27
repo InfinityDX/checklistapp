@@ -11,7 +11,9 @@ class DatePicker extends StatefulWidget {
 }
 
 class _DatePickerState extends State<DatePicker> {
-  var dateTime = DateTime.now();
+  var dateTime =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
   @override
   Widget build(BuildContext context) {
     final isToday = dateTime.day == DateTime.now().day;
@@ -22,7 +24,8 @@ class _DatePickerState extends State<DatePicker> {
       children: [
         GestureDetector(
           onTap: () {
-            setState(() => dateTime = DateTime.now());
+            final now = DateTime.now();
+            setState(() => dateTime = DateTime(now.year, now.month, now.day));
             widget.onPickedDate?.call(dateTime);
           },
           child: Container(
@@ -49,7 +52,9 @@ class _DatePickerState extends State<DatePicker> {
         GestureDetector(
           onTap: () {
             setState(() {
-              dateTime = DateTime.now().add(const Duration(days: 1));
+              final now = DateTime.now();
+              dateTime = DateTime(now.year, now.month, now.day)
+                  .add(const Duration(days: 1));
             });
             widget.onPickedDate?.call(dateTime);
           },

@@ -166,8 +166,6 @@ class _DashboardChartState extends State<DashboardChart> {
                 ),
                 lineBarsData: [
                   LineChartBarData(
-                    // isCurved: true,
-                    // curveSmoothness: 0.1,
                     dotData: FlDotData(show: false),
                     dashArray: [8, 8],
                     barWidth: 4,
@@ -176,8 +174,6 @@ class _DashboardChartState extends State<DashboardChart> {
                     spots: getAllTodo(todoListByDate, isCompletedOnly: true),
                   ),
                   LineChartBarData(
-                    // isCurved: true,
-                    // curveSmoothness: 0.5,
                     dotData: FlDotData(show: false),
                     color: GColor.scheme.primary,
                     isStrokeCapRound: true,
@@ -203,7 +199,7 @@ class _DashboardChartState extends State<DashboardChart> {
       copiedTodo = copiedTodo
           .map((e) => e.where((todo) => todo.isCompleted).toList())
           .toList();
-    } else {}
+    }
     var all7DaysTodo = List.filled(
       7 - copiedTodo.length,
       <Todo>[],

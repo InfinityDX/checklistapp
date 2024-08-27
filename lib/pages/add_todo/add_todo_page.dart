@@ -15,7 +15,8 @@ class AddTodoPage extends StatefulWidget {
 }
 
 class _AddTodoPageState extends State<AddTodoPage> {
-  var date = DateTime.now();
+  var date =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   var title = '';
   @override
   Widget build(BuildContext context) {

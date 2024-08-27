@@ -2,10 +2,12 @@ import 'package:checklistapp/bloc/todo_cubit/todo_cubit.dart';
 import 'package:checklistapp/components/todo_component.dart';
 import 'package:checklistapp/constants/cubit_state_enum.dart';
 import 'package:checklistapp/helper/dependency_helper.dart';
+import 'package:checklistapp/helper/g_color.dart';
 import 'package:checklistapp/models/filter.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
@@ -26,7 +28,7 @@ class _CalendarPageState extends State<CalendarPage> {
       DependencyHelper.todoRepository,
       filter: Filter(
         startDate: dateNow,
-        endDate: dateNow.add(const Duration(days: 1)),
+        endDate: dateNow.add(const Duration(hours: 23)),
       ),
     );
     todoCubit.getTodos();
@@ -66,6 +68,63 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
               focusDate: focusedDate,
               lastDate: DateTime(2100),
+              headerBuilder: (context, date) {
+                final textStyle = TextStyle(
+                  color: GColor.scheme.onSurface,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                );
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: Text(
+                        DateFormat("EEEE").format(date),
+                        style: textStyle,
+                      )),
+                      Text(
+                        DateFormat("d/mm/yyyy").format(date),
+                        style: textStyle,
+                      )
+                    ],
+                  ),
+                );
+              },
+              dayProps: EasyDayProps(
+                activeDayStyle: DayStyle(
+                  decoration: BoxDecoration(
+                    color: GColor.scheme.primaryContainer,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+                inactiveDayStyle: DayStyle(
+                  dayNumStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: GColor.scheme.onSurface,
+                  ),
+                  decoration: BoxDecoration(
+                    color: GColor.scheme.surfaceContainer,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+                todayStyle: DayStyle(
+                  dayNumStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: GColor.scheme.onSurface,
+                  ),
+                  decoration: BoxDecoration(
+                    color: GColor.scheme.surfaceContainer,
+                    border: Border.all(
+                      color: GColor.scheme.primaryContainer,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+              ),
               onDateChange: (selectedDate) {
                 if (focusedDate == selectedDate) return;
                 focusedDate = selectedDate;

@@ -18,6 +18,10 @@ class TodoRepository implements ITodoRepository {
       filter.endDate ?? DateTime(dateNow.year, dateNow.month, dateNow.day),
     );
 
+    if (filter.isCompleted != null) {
+      condition = condition.and(Todo_.isCompleted.equals(filter.isCompleted!));
+    }
+
     final query = DB.todoBox
         .query(condition)
         .order(Todo_.isPrioritized)
