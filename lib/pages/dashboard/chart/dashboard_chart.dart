@@ -17,16 +17,20 @@ class DashboardChart extends StatefulWidget {
 
 class _DashboardChartState extends State<DashboardChart> {
   final maxTodo = 150;
-  final todoCubit = TodoCubit(
-    DependencyHelper.todoRepository,
-    filter: Filter(
-      startDate: DateTime.now().subtract(const Duration(days: 7)),
-      endDate: DateTime.now(),
-    ),
-  );
-
+  late TodoCubit todoCubit;
   @override
   void initState() {
+    final now = DateTime.now();
+    todoCubit = TodoCubit(
+      DependencyHelper.todoRepository,
+      filter: Filter(
+        startDate: DateTime(now.year, now.month, now.day).subtract(
+          const Duration(days: 7),
+        ),
+        endDate: DateTime(now.year, now.month, now.day),
+      ),
+    );
+
     todoCubit.getTodos();
     super.initState();
   }
