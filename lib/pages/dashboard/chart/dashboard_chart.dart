@@ -43,6 +43,7 @@ class _DashboardChartState extends State<DashboardChart> {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16),
       padding: EdgeInsets.fromLTRB(16, 32, 32, 16),
@@ -70,7 +71,7 @@ class _DashboardChartState extends State<DashboardChart> {
 
             return LineChart(
               LineChartData(
-                gridData: FlGridData(show: false),
+                // gridData: FlGridData(show: false),
                 minY: 0,
                 minX: 0,
                 lineTouchData: LineTouchData(
@@ -170,15 +171,18 @@ class _DashboardChartState extends State<DashboardChart> {
                 ),
                 lineBarsData: [
                   LineChartBarData(
-                    dotData: FlDotData(show: false),
+                    // dotData: FlDotData(show: false),
                     dashArray: [8, 8],
                     barWidth: 4,
                     isStrokeCapRound: true,
                     color: GColor.scheme.inversePrimary,
-                    spots: getAllTodo(todoListByDate, isCompletedOnly: true),
+                    spots: getAllTodo(
+                      todoListByDate,
+                      isCompletedOnly: true,
+                    ),
                   ),
                   LineChartBarData(
-                    dotData: FlDotData(show: false),
+                    // dotData: FlDotData(show: false),
                     color: GColor.scheme.primary,
                     isStrokeCapRound: true,
                     barWidth: 4,

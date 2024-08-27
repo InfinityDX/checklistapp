@@ -1,9 +1,11 @@
 import 'package:checklistapp/bloc/todo_cubit/todo_cubit.dart';
+import 'package:checklistapp/components/g_navigation.dart';
 import 'package:checklistapp/helper/dependency_helper.dart';
 import 'package:checklistapp/helper/g_color.dart';
 import 'package:checklistapp/models/entities/todo.entity.dart';
 import 'package:checklistapp/pages/add_todo/add_todo_page.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -21,6 +23,7 @@ class _TodoComponentState extends State<TodoComponent> {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     return Slidable(
       endActionPane: ActionPane(
         extentRatio: 0.3,
@@ -137,9 +140,39 @@ class _TodoComponentState extends State<TodoComponent> {
 
   void onDeleteTodo(BuildContext context) async {
     if (widget.todo == null) return;
-    final todoCubit = TodoCubit(DependencyHelper.todoRepository);
-    await todoCubit.deleteTodo(widget.todo!.id);
-    todoCubit.close();
+    final isOk = await showAdaptiveDialog<bool>(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog.adaptive(
+          title: Text('Do you want to delete this task?'),
+          actions: [
+            adaptiveAction(
+              context: context,
+              onPressed: () => GNavigation.pop(
+                context: context,
+                arg: false,
+              ),
+              child: Text('Cancel'),
+            ),
+            adaptiveAction(
+              context: context,
+              onPressed: () => GNavigation.pop(
+                context: context,
+                arg: true,
+              ),
+              child: Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (isOk ?? false) {
+      final todoCubit = TodoCubit(DependencyHelper.todoRepository);
+      await todoCubit.deleteTodo(widget.todo!.id);
+      todoCubit.close();
+    }
   }
 
   void onEditTodo(BuildContext context) async {
@@ -151,5 +184,20 @@ class _TodoComponentState extends State<TodoComponent> {
         return AddTodoPage(todo: widget.todo);
       },
     );
+  }
+
+  Widget adaptiveAction(
+      {required BuildContext context,
+      required VoidCallback onPressed,
+      required Widget child}) {
+    final ThemeData theme = Theme.of(context);
+    switch (theme.platform) {
+      case TargetPlatform.android:
+        return TextButton(onPressed: onPressed, child: child);
+      case TargetPlatform.iOS:
+        return CupertinoDialogAction(onPressed: onPressed, child: child);
+      default:
+        return TextButton(onPressed: onPressed, child: child);
+    }
   }
 }
