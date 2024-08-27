@@ -26,7 +26,7 @@ class _DashbaordState extends State<Dashbaord>
       DependencyHelper.todoRepository,
       filter: Filter(
         startDate: dateNow,
-        endDate: dateNow.add(const Duration(days: 1)),
+        endDate: dateNow,
       ),
     );
     todayTodo.getTodos();

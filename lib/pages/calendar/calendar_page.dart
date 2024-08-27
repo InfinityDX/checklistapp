@@ -29,7 +29,7 @@ class _CalendarPageState extends State<CalendarPage>
       DependencyHelper.todoRepository,
       filter: Filter(
         startDate: dateNow,
-        endDate: dateNow.add(const Duration(hours: 23)),
+        endDate: dateNow,
       ),
     );
     todoCubit.getTodos();
@@ -151,7 +151,7 @@ class _CalendarPageState extends State<CalendarPage>
                   DependencyHelper.todoRepository,
                   filter: Filter(
                     startDate: selectedDate,
-                    endDate: selectedDate.add(const Duration(days: 1)),
+                    endDate: selectedDate,
                   ),
                 );
                 todoCubit.getTodos();
