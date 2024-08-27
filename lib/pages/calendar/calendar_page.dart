@@ -93,6 +93,21 @@ class _CalendarPageState extends State<CalendarPage> {
               },
               dayProps: EasyDayProps(
                 activeDayStyle: DayStyle(
+                  dayNumStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: GColor.scheme.onPrimaryContainer,
+                  ),
+                  dayStrStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                    color: GColor.scheme.onPrimaryContainer,
+                  ),
+                  monthStrStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                    color: GColor.scheme.onPrimaryContainer,
+                  ),
                   decoration: BoxDecoration(
                     color: GColor.scheme.primaryContainer,
                     borderRadius: BorderRadius.circular(16),
