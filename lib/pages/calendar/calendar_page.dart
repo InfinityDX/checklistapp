@@ -20,6 +20,7 @@ class _CalendarPageState extends State<CalendarPage>
     with AutomaticKeepAliveClientMixin {
   var focusedDate = DateTime.now();
   late TodoCubit todoCubit;
+  bool isSortByPriorities = false;
 
   @override
   void initState() {

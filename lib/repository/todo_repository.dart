@@ -22,7 +22,7 @@ class TodoRepository implements ITodoRepository {
 
     final query = DB.todoBox
         .query(condition)
-        .order(Todo_.isPrioritized)
+        .order(Todo_.isPrioritized, flags: Order.descending)
         .order(Todo_.createdDate, flags: filter.order)
         .build();
 
@@ -45,7 +45,7 @@ class TodoRepository implements ITodoRepository {
 
     final sub = DB.todoBox
         .query(condition)
-        .order(Todo_.isPrioritized)
+        .order(Todo_.isPrioritized, flags: Order.descending)
         .order(Todo_.createdDate, flags: filter.order)
         .watch(triggerImmediately: true);
 

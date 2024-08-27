@@ -9,17 +9,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-class TodoComponent extends StatefulWidget {
+class TodoComponent extends StatelessWidget {
   final Todo? todo;
   const TodoComponent({this.todo, super.key});
-
-  @override
-  State<TodoComponent> createState() => _TodoComponentState();
-}
-
-class _TodoComponentState extends State<TodoComponent> {
-  late var isCompleted = widget.todo?.isCompleted ?? false;
-  late var isPriority = widget.todo?.isPrioritized ?? false;
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +65,7 @@ class _TodoComponentState extends State<TodoComponent> {
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: isPriority
+          color: todo?.isPrioritized ?? false
               ? GColor.scheme.errorContainer
               : GColor.scheme.surfaceContainer,
         ),
@@ -81,14 +73,13 @@ class _TodoComponentState extends State<TodoComponent> {
           children: [
             GestureDetector(
               onTap: () {
-                setState(() => isCompleted = !isCompleted);
-                updateTodo();
+                updateTodo(!(todo?.isCompleted ?? false), null);
               },
               child: Icon(
-                isCompleted
+                todo?.isCompleted ?? false
                     ? FluentIcons.checkmark_circle_24_filled
                     : FluentIcons.circle_24_regular,
-                color: isCompleted
+                color: todo?.isCompleted ?? false
                     ? GColor.scheme.outline
                     : GColor.scheme.onSurface,
               ),
@@ -96,30 +87,34 @@ class _TodoComponentState extends State<TodoComponent> {
             const SizedBox(width: 16),
             Expanded(
               child: Text(
-                widget.todo?.title ?? '--',
+                todo?.title ?? '--',
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 16,
                   decorationThickness: 4,
-                  color: isCompleted
+                  color: todo?.isCompleted ?? false
                       ? GColor.scheme.outline
                       : GColor.scheme.onSurface,
-                  decoration: isCompleted ? TextDecoration.lineThrough : null,
+                  decoration: todo?.isCompleted ?? false
+                      ? TextDecoration.lineThrough
+                      : null,
                   decorationColor: GColor.scheme.outline,
                 ),
               ),
             ),
             GestureDetector(
               onTap: () {
-                if (isCompleted) return;
-                setState(() => isPriority = !isPriority);
-                updateTodo();
+                if (todo?.isCompleted ?? false) return;
+
+                updateTodo(null, !(todo?.isPrioritized ?? false));
               },
               child: Icon(
-                isPriority
+                todo?.isPrioritized ?? false
                     ? FluentIcons.star_24_filled
                     : FluentIcons.star_24_regular,
-                color: isPriority ? GColor.scheme.error : GColor.scheme.outline,
+                color: todo?.isPrioritized ?? false
+                    ? GColor.scheme.error
+                    : GColor.scheme.outline,
               ),
             ),
           ],
@@ -128,10 +123,10 @@ class _TodoComponentState extends State<TodoComponent> {
     );
   }
 
-  void updateTodo() async {
+  void updateTodo(bool? isCompleted, bool? isPrioritized) async {
     final todoCubit = TodoCubit(DependencyHelper.todoRepository);
-    final updatedTodo = widget.todo
-        ?.copyWith(isCompleted: isCompleted, isPrioritized: isPriority);
+    final updatedTodo =
+        todo?.copyWith(isCompleted: isCompleted, isPrioritized: isPrioritized);
 
     if (updatedTodo == null) return;
     await todoCubit.updateTodo(updatedTodo);
@@ -139,7 +134,7 @@ class _TodoComponentState extends State<TodoComponent> {
   }
 
   void onDeleteTodo(BuildContext context) async {
-    if (widget.todo == null) return;
+    if (todo == null) return;
     final isOk = await showAdaptiveDialog<bool>(
       context: context,
       barrierDismissible: true,
@@ -170,18 +165,18 @@ class _TodoComponentState extends State<TodoComponent> {
 
     if (isOk ?? false) {
       final todoCubit = TodoCubit(DependencyHelper.todoRepository);
-      await todoCubit.deleteTodo(widget.todo!.id);
+      await todoCubit.deleteTodo(todo!.id);
       todoCubit.close();
     }
   }
 
   void onEditTodo(BuildContext context) async {
-    if (widget.todo == null) return;
+    if (todo == null) return;
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return AddTodoPage(todo: widget.todo);
+        return AddTodoPage(todo: todo);
       },
     );
   }

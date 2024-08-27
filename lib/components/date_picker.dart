@@ -13,7 +13,8 @@ class DatePicker extends StatefulWidget {
 
 class _DatePickerState extends State<DatePicker> {
   late var dateTime = widget.initialDate ??
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+      // DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+      DateTime.now();
 
   @override
   Widget build(BuildContext context) {

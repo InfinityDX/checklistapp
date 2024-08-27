@@ -48,7 +48,7 @@ class TodoCubit extends Cubit<TodoState> {
 
   Future<void> _onTodoCollectionsChanged(Query<Todo> todoQuery) async {
     final result = await todoQuery.findAsync();
-    emit(state.copyWith(todos: result));
+    emit(state.copyWith(todos: result, status: CubitStatus.initial));
   }
 
   Future<void> addTodo(Todo todo) async {

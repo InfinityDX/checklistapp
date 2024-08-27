@@ -42,7 +42,6 @@ class _DashbaordState extends State<Dashbaord>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
     return SafeArea(
       child: CustomScrollView(
         slivers: [
@@ -119,6 +118,7 @@ class _DashbaordState extends State<Dashbaord>
                     return TodoComponent(todo: todo);
                   },
                   childCount: state.todos.length,
+                  addAutomaticKeepAlives: false,
                 ),
               );
             },
