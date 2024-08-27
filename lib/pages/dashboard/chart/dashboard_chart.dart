@@ -83,12 +83,12 @@ class _DashboardChartState extends State<DashboardChart> {
                           ),
                         ),
                         LineTooltipItem(
-                          'Done: ${touchedSpots[1].y}',
-                          TextStyle(
-                            color: GColor.scheme.inversePrimary,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                            'Done: ${touchedSpots[1].y}',
+                            TextStyle(
+                              color: GColor.scheme.inversePrimary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            children: []),
                       ];
                     },
                     getTooltipColor: (touchedSpot) {

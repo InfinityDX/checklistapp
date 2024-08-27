@@ -17,9 +17,11 @@ class AddTodoPage extends StatefulWidget {
 class _AddTodoPageState extends State<AddTodoPage> {
   var date =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-  var title = '';
+  late var title = widget.todo?.title ?? '';
+
   @override
   Widget build(BuildContext context) {
+    final isEdit = widget.todo != null;
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Padding(
@@ -29,7 +31,7 @@ class _AddTodoPageState extends State<AddTodoPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Add Todo',
+              isEdit ? 'Edit Todo' : 'Add Todo',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
             ),
             Column(
@@ -40,12 +42,14 @@ class _AddTodoPageState extends State<AddTodoPage> {
                 const Text('Title'),
                 const SizedBox(height: 4),
                 TextFormField(
+                  initialValue: title,
                   onChanged: (val) => title = val,
                 ),
                 const SizedBox(height: 16),
                 const Text('Date'),
                 const SizedBox(height: 4),
                 DatePicker(
+                  initialDate: widget.todo?.createdDate,
                   onPickedDate: (pickedDate) {
                     setState(() => date = pickedDate);
                   },
@@ -58,12 +62,11 @@ class _AddTodoPageState extends State<AddTodoPage> {
               child: TextButton(
                 onPressed: () async {
                   if (title.isEmpty) return;
-                  final todoCubit = TodoCubit(DependencyHelper.todoRepository);
-                  await todoCubit.addTodo(Todo(
-                    title: title,
-                    createdDate: date,
-                  ));
-                  todoCubit.close();
+                  if (isEdit) {
+                    await updateTodo();
+                  } else {
+                    await addTodo();
+                  }
                   GNavigation.pop();
                 },
                 style: ButtonStyle(
@@ -81,5 +84,25 @@ class _AddTodoPageState extends State<AddTodoPage> {
         ),
       ),
     );
+  }
+
+  Future<void> updateTodo() async {
+    if (widget.todo == null) return;
+    final todoCubit = TodoCubit(DependencyHelper.todoRepository);
+    final updatedTodo = widget.todo!.copyWith(
+      title: title,
+      createdDate: date,
+    );
+    await todoCubit.updateTodo(updatedTodo);
+    todoCubit.close();
+  }
+
+  Future<void> addTodo() async {
+    final todoCubit = TodoCubit(DependencyHelper.todoRepository);
+    await todoCubit.addTodo(Todo(
+      title: title,
+      createdDate: date,
+    ));
+    todoCubit.close();
   }
 }
