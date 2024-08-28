@@ -3,7 +3,6 @@ name: Flutter
 on:
   push:
     branches: ["prod"]
-  workflow_dispatch:
 
 jobs:
   build:
@@ -42,11 +41,3 @@ jobs:
       # Create android apk
       - name: Build apk
         run: flutter build apk
-
-      - name: Send APK to Telegram
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_GROUP }}
-          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          message: Latest Build
-          document: build/app/outputs/flutter-apk/app-release.apk
