@@ -5,9 +5,7 @@ on:
     branches: ["prod"]
 
 jobs:
-  flutter_job:
-    # The machine, we can also use windows-latest or ubuntu-latest
-    # We are choosing macos-latest because we will be also building for iOS
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -43,3 +41,12 @@ jobs:
       # Create android apk
       - name: Build apk
         run: flutter build apk
+
+      - uses: actions/checkout@master
+      - name: Send APK to Telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_GROUP }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message: Latest Build
+          document: build/app/outputs/flutter-apk/app-release.apk
