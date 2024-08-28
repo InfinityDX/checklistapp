@@ -3,6 +3,7 @@ name: Flutter
 on:
   push:
     branches: ["prod"]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -42,7 +43,6 @@ jobs:
       - name: Build apk
         run: flutter build apk
 
-      - uses: actions/checkout@master
       - name: Send APK to Telegram
         uses: appleboy/telegram-action@master
         with:
